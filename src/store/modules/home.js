@@ -19,11 +19,11 @@ const actions = {
   }
   ,
   // 2.获取banner数据的方法
-  async getBannerListData({ commit }) {
+  async getBannerListData(context) {
     const bannerData = await reqBannerListData()
-    console.log('banner按数据', bannerData);
+    // console.log('banner按数据', bannerData);
     if (bannerData.code === 200) {
-      commit('SAVE_BANNER_LIST_DATA', bannerData.data)
+      context.commit('SAVE_BANNER_LIST_DATA', bannerData.data)
     } else {
       console.log('banner数据请求失败');
     }

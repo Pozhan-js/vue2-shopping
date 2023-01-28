@@ -5,7 +5,7 @@ import NProgress from 'nprogress'
 
 // 创建axios实列
 const mockAjax = axios.create({
-  baseUrl: '/mock',
+  baseURL: "/mock",
   timeout: 1000
 })
 

@@ -1,11 +1,6 @@
 import VueRouter from 'vue-router'
 import vue from 'vue'
-
-
-import Home from '../view/Home'
-import Login from '../view/Login'
-import Register from '../view/Register'
-import Search from '../view/Search'
+import routes from './routes'
 
 // 使用路由插件
 vue.use(VueRouter)
@@ -35,33 +30,10 @@ VueRouter.prototype.replace = function (location, okCallback, errCallback) {
   }
 }
 
-const routes = new VueRouter({
-  routes: [
-    {
-      path: '/home',  //对应的路由路径
-      component: Home  //对应显示的页面
-    }, {
-      path: '/login',
-      component: Login,
-      meta: {
-        isHiddenFooter: true //通过路由元信息 判断是否显示底部
-      }
-    }, {
-      path: '/register',
-      component: Register,
-      meta: {
-        isHiddenFooter: true
-      }
-    }, {
-      path: '/search',
-      component: Search
-    },
-    {
-      path: '/',  // 设置默认的页面
-      redirect: '/home'
-    }
-  ]
+const router = new VueRouter({
+  mode: 'history',
+  routes: routes
 })
 
 //导出router对象
-export default routes
+export default router

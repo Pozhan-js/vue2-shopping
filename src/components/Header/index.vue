@@ -33,8 +33,8 @@
         </h1>
         <div class="searchArea">
           <form action="###" class="searchForm">
-            <input type="text" id="autocomplete" class="input-error input-xxlarge" />
-            <button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+            <input type="text" v-model="keyword" id="autocomplete" class="input-error input-xxlarge" />
+            <button class="sui-btn btn-xlarge btn-danger" @click="btnSearch" type="button">搜索</button>
           </form>
         </div>
       </div>
@@ -46,9 +46,21 @@
 <script>
 export default {
   name: "Header",
+  data(){
+    return {
+      keyword:''
+    }
+  },
   methods: {
     btnSearch() {
-      this.$router.push('/search')
+      // this.$router.push('/search')
+    //当页面跳转时传递keyWord参数
+    this.$router.push({
+      name:'search', //通过命名参数进行跳转
+      params:{
+        keyword:this.keyword || undefined
+      }
+    })
     }
   }
 }

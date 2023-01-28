@@ -4,21 +4,21 @@
     <div class="container">
       <div class="nav-left" @mouseleave="handleMouseLeave">
         <h2 class="all" @mouseenter="isShowNav= true">全部商品分类</h2>
-        <div class="sort">
+        <div class="sort" v-show="isShowNav">
           <div class="all-sort-list2" @click="btnSearch">
             <div class="item" v-for="level_one in categoryList.slice(0, -2)" :key="level_one.categoryId">
               <h3>
-                <a href="">{{ level_one.categoryName }}</a>
+                <a href="" data-level='1' :data-id='level_one.categoryId' :data-name='level_one.categoryName'>{{ level_one.categoryName }}</a>
               </h3>
               <div class="item-list clearfix">
                 <div class="subitem">
                   <dl class="fore" v-for="level_two in level_one.categoryChild" :key="level_two.categoryId">
                     <dt>
-                      <a href="">{{ level_two.categoryName }}</a>
+                      <a href="" data-level='2' :data-id='level_two.categoryId' :data-name='level_two.categoryName'>{{ level_two.categoryName }}</a>
                     </dt>
                     <dd>
                       <em v-for="level_three in level_two.categoryChild" :key="level_three.categoryId">
-                        <a href="">{{ level_three.categoryName }}</a>
+                        <a href="" data-level='3' :data-id='level_three.categoryId' :data-name='level_three.categoryName'>{{ level_three.categoryName }}</a>
                       </em>
                     </dd>
                   </dl>
@@ -52,8 +52,19 @@ export default {
     }
   },
   methods:{
-    btnSearch(){
-      this.$router.push('/search') //通过编程式导航跳转到search页面
+    //当点击三级列表时 发生跳转将search页面需要的参数传过去
+    btnSearch(e){
+      let {level,id,name} = e.target.dataset
+
+      if(!level) return //当没有等级时说明点击的不是三级列表中的链接
+      // this.$router.push('/search') //通过编程式导航跳转到search页面
+      this.$router.push({
+        name: 'search',
+        query:{
+          categoryName:name,
+          ['category'+level+'Id']:id
+        }
+      })
     },
     handleMouseLeave(){
     if(!this.$route.meta.isHiddenNav){
@@ -116,7 +127,7 @@ export default {
       position: absolute;
       background: #fafafa;
       z-index: 999;
-      border-: 2px solid #e1251b;
+      border-top: 2px solid #e1251b;
 
       .all-sort-list2 {
         .item {
