@@ -4,19 +4,10 @@
     <div class="sortList clearfix">
       <div class="center">
         <!--banner轮播-->
-        <div class="swiper-container" id="mySwiper">
+        <div class="swiper-container banner-container" id="mySwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <img src="./images/banner1.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner2.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner3.jpg" />
-            </div>
-            <div class="swiper-slide">
-              <img src="./images/banner4.jpg" />
+            <div class="swiper-slide"  v-for="banner in bannerList" :key="banner.id">
+              <img :src="banner.imgUrl" />
             </div>
           </div>
           <!-- 如果需要分页器 -->
@@ -111,8 +102,36 @@
 </template>
 
 <script>
+// 引入swiper
+import Swiper from 'swiper'
+import {mapState} from 'vuex'
 export default {
   name: 'ListContainer',
+  computed:{
+    // 得到轮播图数据
+    ...mapState('home',['bannerList'])
+  },
+  watch: {
+    bannerList(){
+      this.$nextTick(()=>{
+        // 启用swiper
+      new Swiper('.banner-container', {
+      // slidesPerView: 1,
+      // spaceBetween: 30,
+      autoplay:true,
+      loop: true,
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,  //单点小圆点实现切换轮播
+      }, 
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+       })
+      })
+    }
+  },
   mounted(){
     // 当页面加载时获取banner数据
     this.$store.dispatch('home/getBannerListData')

@@ -12,3 +12,5 @@ export const reqCategoryListData = () => ajax.get('/api/product/getBaseCategoryL
 // 获取banner数据
 // 发送请求 获取mock数据
 export const reqBannerListData = () => mockAjax.get('/banner')
+// 3. 获取楼层数据
+export const reqGetFloorsListData = () => mockAjax.get('/floor')
