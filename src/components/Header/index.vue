@@ -54,12 +54,15 @@ export default {
   methods: {
     btnSearch() {
       // this.$router.push('/search')
+      let {query} = this.$route
     //当页面跳转时传递keyWord参数
     this.$router.push({
       name:'search', //通过命名参数进行跳转
       params:{
         keyword:this.keyword || undefined
-      }
+      },
+      //这里可能会疑惑为什么 会有query参数 因为在search页面也有搜索框 
+      query
     })
     }
   }

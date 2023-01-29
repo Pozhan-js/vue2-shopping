@@ -7,10 +7,11 @@ const state = {
 const actions = {
   async getSearchGoodsInfoData({ commit }, searchParams) {
     const goodsData = await reqSearchGoodsInfoData(searchParams)
+    console.log('商品信息', goodsData);
     if (goodsData.code === 200) {
-      commit('GET_SEARCH_GOODS_INFO_DATA', searchParams.data)
+      commit('GET_SEARCH_GOODS_INFO_DATA', goodsData.data)
     } else {
-      console.log(result.message)
+      console.log(goodsData.message)
     }
   }
 }
@@ -21,12 +22,23 @@ const mutations = {
   }
 }
 
-const getter = {}
+const getters = {
+  // 属性列表
+  attrList() {
+    return state.goodsInfo.attrList
+  },
+  goodsList() {
+    return state.goodsInfo.goodsList
+  },
+  trademarkList() {
+    return state.goodsInfo.trademarkList
+  }
+}
 
 export default {
-  namespace: true, //开启命名空间
+  namespaced: true, //开启命名空间
   state,
   actions,
   mutations,
-  getter
+  getters
 }

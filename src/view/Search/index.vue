@@ -12,10 +12,7 @@
 						</li>
 					</ul>
 					<ul class="fl sui-tag">
-						<li class="with-x">手机</li>
-						<li class="with-x">iphone<i>×</i></li>
-						<li class="with-x">华为<i>×</i></li>
-						<li class="with-x">OPPO<i>×</i></li>
+						<li class="with-x" v-show="searchParams.categoryName">{{searchParams.categoryName}}<i @click="removeCategoryName">×</i></li>
 					</ul>
 				</div>
 
@@ -52,20 +49,19 @@
 					<!-- 商品列表 -->
 					<div class="goods-list">
 						<ul class="yui3-g">
-							<li class="yui3-u-1-5">
+							<li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
 								<div class="list-wrap">
 									<div class="p-img">
-										<a href="item.html" target="_blank"><img src="./images/mobile01.png" /></a>
+										<a href="#" target="_blank"><img :src="goods.defaultImg" /></a>
 									</div>
 									<div class="price">
 										<strong>
-											<em>¥</em>
-											<i>6088.00</i>
+											<em>¥ </em>
+											<i>{{goods.price}}</i>
 										</strong>
 									</div>
 									<div class="attr">
-										<a target="_blank" href="item.html" title="促销信息，下单即赠送三个月CIBN视频会员卡！【小米电视新品4A 58 火爆预约中】">Apple苹果iPhone
-											6s (A1699)Apple苹果iPhone 6s (A1699)Apple苹果iPhone 6s (A1699)Apple苹果iPhone 6s (A1699)</a>
+										<a target="_blank" href="item.html" :title="goods.title">{{goods.title}}</a>
 									</div>
 									<div class="commit">
 										<i class="command">已有<span>2000</span>人评价</i>
@@ -129,9 +125,9 @@
 					keyword: '', //关键词
 					props:[],  //跳转三级导航传递参数
 					trademark: '', //品牌
-					order: '', //升序还是降序
-					pageNo: '',
-					pageSize: '',
+					order: '1:asc', //升序还是降序
+					pageNo: 1,
+					pageSize: 5,
 				}
 			}
 		},
@@ -149,22 +145,31 @@
           categoryName: undefined,
           keyword: undefined,
         })
-
 				// 获取通过变成导航传递过来的参数 注意路由参数都在 $route中 方法都在$router中
 				// let {query,params} = this.$route
 				let {query,params} = newValue
 				// 合并对象属性
 				Object.assign(this.searchParams,query,params)
+				// 当获取到请求数据时 发送请求
+				this.$store.dispatch("search/getSearchGoodsInfoData",this.searchParams)
 				}
 			}
 		},
-		computed:{},
-		methods:{
-
+		computed:{
+			...mapGetters('search',['goodsList'])
 		},
-		mounted(){
-
-		}
+		methods:{
+			// 删除分类名
+			removeCategoryName(){
+				let { params } = this.$route
+				// console.log('路由数据',params);
+				// 在进行跳转 因为页面是在检测$route对象的 一旦页面发生跳转或者刷新的话 会生成新的$route
+				this.$router.push({
+					name:'search',
+					params
+				})	
+			}
+		},
 	}
 </script>
 

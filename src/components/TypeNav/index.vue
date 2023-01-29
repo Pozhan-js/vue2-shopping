@@ -63,7 +63,7 @@ export default {
         query:{
           categoryName:name,
           ['category'+level+'Id']:id
-        }
+        },
       })
     },
     handleMouseLeave(){

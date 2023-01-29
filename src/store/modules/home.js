@@ -32,7 +32,7 @@ const actions = {
   // 获取floor楼层数据
   async getFloorsListData({ commit }) {
     const floorData = await reqGetFloorsListData()
-    console.log('floor数据', floorData);
+    // console.log('floor数据', floorData);
     if (floorData.code === 200) {
       commit('SAVE_FLOOR_LIST_DATA', floorData.data)
     } else {
