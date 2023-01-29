@@ -7,7 +7,7 @@ const state = {
 const actions = {
   async getSearchGoodsInfoData({ commit }, searchParams) {
     const goodsData = await reqSearchGoodsInfoData(searchParams)
-    console.log('商品信息', goodsData);
+    // console.log('商品信息', goodsData);
     if (goodsData.code === 200) {
       commit('GET_SEARCH_GOODS_INFO_DATA', goodsData.data)
     } else {
@@ -24,13 +24,13 @@ const mutations = {
 
 const getters = {
   // 属性列表
-  attrList() {
-    return state.goodsInfo.attrList
+  attrList(state) {
+    return state.goodsInfo.attrsList
   },
-  goodsList() {
+  goodsList(state) {
     return state.goodsInfo.goodsList
   },
-  trademarkList() {
+  trademarkList(state) {
     return state.goodsInfo.trademarkList
   }
 }

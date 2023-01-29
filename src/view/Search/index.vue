@@ -13,11 +13,19 @@
 					</ul>
 					<ul class="fl sui-tag">
 						<li class="with-x" v-show="searchParams.categoryName">{{searchParams.categoryName}}<i @click="removeCategoryName">×</i></li>
+						<li class="with-x" v-show="searchParams.keyword">
+              {{ searchParams.keyword }}<i @click="removeKeyword">×</i>
+            </li>
+						<li class="with-x" v-show="searchParams.trademark">{{trademarkName}}<i @click="removeTrademark">×</i></li>
+						<!-- 通过filters来对 props的数据进行处理  item | 这个是管道符号   -->
+						<li class="with-x" v-show="searchParams.props" v-for="item,index in searchParams.props" :key="index">
+              {{ item | formatProp}}<i @click="removeAttrValue(index)">×</i>
+            </li>
 					</ul>
 				</div>
 
 				<!-- 搜索器 -->
-				<SearchSelector />
+				<SearchSelector @get-trademark="saveTrademark" @get-attr="saveAttrValue"/>
 
 				<!--商品展示区-->
 				<div class="details clearfix">
@@ -112,7 +120,7 @@
 
 <script>
 	import SearchSelector from './SearchSelector'
-	import {mapState,mapGetters} from 'vuex'
+	import {mapGetters} from 'vuex'
 	export default {
 		name: 'Search',
 		data(){
@@ -156,9 +164,17 @@
 			}
 		},
 		computed:{
-			...mapGetters('search',['goodsList'])
+			...mapGetters('search',['goodsList']),
+			trademarkName(){
+				let {trademark} =this.searchParams
+				return  trademark? trademark.split(':')[1]:''
+			}
 		},
 		methods:{
+			 // 0. 封装后的搜索
+			search() {
+				this.$store.dispatch('search/getSearchGoodsInfoData', this.searchParams)
+			},
 			// 删除分类名
 			removeCategoryName(){
 				let { params } = this.$route
@@ -168,8 +184,52 @@
 					name:'search',
 					params
 				})	
+			},
+			// 删除关键词
+			removeKeyword(){
+				// 获取query参数
+				let {query} =this.$route
+				// 进行页面跳转 修改url
+				this.$router.push({
+					name:'search',
+					query
+				})
+			},
+			//删除品牌
+			removeTrademark(){
+				// 将品牌设置为undefined
+				this.searchParams.trademark = undefined
+				this.search()
+			},
+			// 定义事件添加trademark 添加面包屑
+			saveTrademark(trademark){
+				this.searchParams.trademark = `${trademark.tmId}:${trademark.tmName}`
+				// 调用search事件重新发送请求
+				this.search()
+			},
+			// 添加销售属性面包屑
+			saveAttrValue(attr){
+				let {id,attrName,attrValue} = attr
+				let prop = `${id}:${attrValue}:${attrName}`
+				if(!this.searchParams.props.includes(prop)){
+					this.searchParams.props.push(prop)
+
+					//重新发送请求
+					this.search()
+				}
+			},
+			// 删除属性值面包屑
+			removeAttrValue(index){
+				this.searchParams.props.splice(index,1)
 			}
 		},
+		filters:{
+			formatProp(val){
+				// 将字符串以 冒号来进行切割
+				const arr = val.split(':')
+				return `${arr[2]}:${arr[1]}`
+			}
+		}
 	}
 </script>
 

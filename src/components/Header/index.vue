@@ -65,7 +65,18 @@ export default {
       query
     })
     }
+  },
+  mounted(){
+    // 当页面跳转时 将搜索框数据清除
+    this.$bus.$on('remove-searchKeyword',()=>{
+      this.keyword = ''
+    })
+  },
+  beforeDestroy(){
+    // 当组件卸载时 清除事件 释放缓存
+    this.$bus.$off('remove-searchKeyword')
   }
+
 }
 </script>
 
