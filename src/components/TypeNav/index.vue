@@ -82,6 +82,8 @@ export default {
     this.$store.dispatch('home/getCategoryListData') //相当于在页面挂在时 调用vuex中的getCategoryListData方法
     if(this.$route.meta.isHiddenNav){
       this.isShowNav = true
+    }else{
+      this.isShowNav = false
     }
   }
 }

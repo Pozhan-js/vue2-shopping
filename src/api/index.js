@@ -14,3 +14,5 @@ export const reqCategoryListData = () => ajax.get('/api/product/getBaseCategoryL
 export const reqBannerListData = () => mockAjax.get('/banner')
 // 3. 获取楼层数据
 export const reqGetFloorsListData = () => mockAjax.get('/floor')
+// 4. 获取搜索数据   这个不是List 因为不是数组 是一个对象
+export const reqSearchGoodsInfoData = (searchParams) => ajax.post('/list', searchParams);

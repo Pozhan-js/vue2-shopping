@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import home from './modules/home'
+import search from './modules/search'
 
 // 将插件挂载到vue实例上
 Vue.use(Vuex)
@@ -21,7 +22,8 @@ const store = new Vuex.Store({
   mutations,
   getters,
   modules: {
-    home
+    home,
+    search
   }
 })
 
