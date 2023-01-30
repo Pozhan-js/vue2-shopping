@@ -26,6 +26,11 @@ const routes = [
     component: () => import('@/view/Search'),
   },
   {
+    name: 'detail',
+    path: '/detail/:id?',
+    component: () => import('@/view/Detail') //详情页
+  },
+  {
     path: '/',  // 设置默认的页面
     redirect: '/home'
   }
