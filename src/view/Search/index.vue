@@ -33,23 +33,20 @@
 					<div class="sui-navbar">
 						<div class="navbar-inner filter">
 							<ul class="sui-nav">
-								<li class="active">
-									<a href="#">综合</a>
+								<li :class="{active:!isPrice}" @click="handleOrder(1)">
+									<a href="#">综合 
+										<span class="iconfont" :class="{'icon-shangfan':isUp,'icon-xiafan':!isUp}" v-show="!isPrice">
+											</span>
+											</a>
 								</li>
-								<li>
-									<a href="#">销量</a>
-								</li>
-								<li>
-									<a href="#">新品</a>
-								</li>
-								<li>
-									<a href="#">评价</a>
-								</li>
-								<li>
-									<a href="#">价格⬆</a>
-								</li>
-								<li>
-									<a href="#">价格⬇</a>
+								<li :class="{active:isPrice}" @click="handleOrder(2)">
+									<a href="#">价格 
+										<span 
+											class="iconfont" 
+											:class="{'icon-shangfan':isUp,'icon-xiafan':!isUp}" 
+											v-show="isPrice">
+										</span>
+										</a>
 								</li>
 							</ul>
 						</div>
@@ -99,7 +96,7 @@
 <script>
 	import SearchSelector from './SearchSelector'
 	import {mapGetters} from 'vuex'
-import search from '@/store/modules/search'
+	import './font/iconfont.css'
 	export default {
 		name: 'Search',
 		data(){
@@ -147,6 +144,14 @@ import search from '@/store/modules/search'
 			trademarkName(){
 				let {trademark} =this.searchParams
 				return  trademark? trademark.split(':')[1]:''
+			},
+			//判断点击时是否为价格
+			isPrice(){
+				return this.searchParams.order.split(':')[0] === '2'
+			},
+			// 判断是否为升序
+			isUp(){
+				return this.searchParams.order.split(':')[1] === 'asc'
 			}
 		},
 		methods:{
@@ -205,6 +210,18 @@ import search from '@/store/modules/search'
 			getPageNum(num){
 				this.searchParams.pageNum = num
 				// 重新发送请求
+				this.search()
+			},
+			// 当点击是改变图标
+			handleOrder(newNum){
+				let[oldNum,oldType] = this.searchParams.order.split(':')
+				// 判断是价格还是综合
+				if(oldNum == newNum){
+						this.searchParams.order = `${oldNum}:${oldType === 'asc'?'desc':'asc'}`
+				}else{
+					this.searchParams.order = `${newNum}:asc`
+				}
+
 				this.search()
 			}
 		},
