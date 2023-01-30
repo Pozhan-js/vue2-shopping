@@ -82,36 +82,14 @@
 							</li>
 						</ul>
 					</div>
-					<!-- 分页器 -->
-					<div class="fr page">
-						<div class="sui-pagination clearfix">
-							<ul>
-								<li class="prev disabled">
-									<a href="#">«上一页</a>
-								</li>
-								<li class="active">
-									<a href="#">1</a>
-								</li>
-								<li>
-									<a href="#">2</a>
-								</li>
-								<li>
-									<a href="#">3</a>
-								</li>
-								<li>
-									<a href="#">4</a>
-								</li>
-								<li>
-									<a href="#">5</a>
-								</li>
-								<li class="dotted"><span>...</span></li>
-								<li class="next">
-									<a href="#">下一页»</a>
-								</li>
-							</ul>
-							<div><span>共10页&nbsp;</span></div>
-						</div>
-					</div>
+				<!-- 分页器 -->
+          <Pagination 
+					:total="total" 
+					:pageSize="searchParams.pageSize" 
+					:continues="5" 
+					:pageNum="searchParams.pageNum"
+					@change-pageNum="getPageNum"
+					></Pagination>
 				</div>
 			</div>
 		</div>
@@ -121,6 +99,7 @@
 <script>
 	import SearchSelector from './SearchSelector'
 	import {mapGetters} from 'vuex'
+import search from '@/store/modules/search'
 	export default {
 		name: 'Search',
 		data(){
@@ -133,8 +112,8 @@
 					keyword: '', //关键词
 					props:[],  //跳转三级导航传递参数
 					trademark: '', //品牌
-					order: '1:asc', //升序还是降序
-					pageNo: 1,
+					order: '1:asc', //升序还是降序   比如order:'1:asc'    order:'2:desc'  1是销量   2代表价格
+					pageNum: 1,
 					pageSize: 5,
 				}
 			}
@@ -164,7 +143,7 @@
 			}
 		},
 		computed:{
-			...mapGetters('search',['goodsList']),
+			...mapGetters('search',['goodsList','total']),
 			trademarkName(){
 				let {trademark} =this.searchParams
 				return  trademark? trademark.split(':')[1]:''
@@ -221,6 +200,12 @@
 			// 删除属性值面包屑
 			removeAttrValue(index){
 				this.searchParams.props.splice(index,1)
+			},
+			// 获取当前页 （分页器）
+			getPageNum(num){
+				this.searchParams.pageNum = num
+				// 重新发送请求
+				this.search()
 			}
 		},
 		filters:{

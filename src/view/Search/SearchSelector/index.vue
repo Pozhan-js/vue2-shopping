@@ -40,7 +40,6 @@ import {mapGetters} from 'vuex'
 		handleAttr(attr,attrValue){
 			this.$emit('get-attr',{id:attr.attrId,attrName:attr.attrName,attrValue})
 		}
-
 		}
 	}
 </script>
