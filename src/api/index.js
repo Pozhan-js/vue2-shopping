@@ -16,3 +16,5 @@ export const reqBannerListData = () => mockAjax.get('/banner')
 export const reqGetFloorsListData = () => mockAjax.get('/floor')
 // 4. 获取搜索数据   这个不是List 因为不是数组 是一个对象
 export const reqSearchGoodsInfoData = (searchParams) => ajax.post('/list', searchParams)
+// 5. 获取商品详情数据
+export const reqGoodDetailInfoData = (id) => ajax.get(`/item/${id}`)

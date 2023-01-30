@@ -83,3 +83,16 @@ this.$router.push({
 4.将mockServer引入main文件中保证在项目已启动 mock服务器也会立即启动
 
 
+
+### 解决生命式导航 滑动块位置还停留在跳转之前的位置 而不是在新页面的最上方
+1.配置router对象
+2.添加滚动行为 
+  scrollBehavior(to, from, savedPosition) {
+    if(savedPosition){
+      return savedPosition
+    }else{
+      return {x: 0, y: 0}
+    }
+  }
+
+

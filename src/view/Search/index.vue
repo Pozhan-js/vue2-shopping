@@ -57,7 +57,7 @@
 							<li class="yui3-u-1-5" v-for="goods in goodsList" :key="goods.id">
 								<div class="list-wrap">
 									<div class="p-img">
-										<router-link :to="`/detail/${goods.id}}`"><img :src="goods.defaultImg" /></router-link>
+										<router-link :to="`/detail/${goods.id}`"><img :src="goods.defaultImg" /></router-link>
 									</div>
 									<div class="price">
 										<strong>
@@ -66,7 +66,7 @@
 										</strong>
 									</div>
 									<div class="attr">
-										<router-link :to="`/detail/${goods.id}}`" :title="goods.title">{{goods.title}}</router-link>
+										<router-link :to="`/detail/${goods.id}`" v-html="goods.title" :title="goods.title">{{goods.title}}</router-link>
 									</div>
 									<div class="commit">
 										<i class="command">已有<span>2000</span>人评价</i>
@@ -84,7 +84,7 @@
 					:total="total" 
 					:pageSize="searchParams.pageSize" 
 					:continues="5" 
-					:pageNum="searchParams.pageNum"
+					:pageNum="searchParams.pageNo"
 					@change-pageNum="getPageNum"
 					></Pagination>
 				</div>
@@ -110,7 +110,7 @@
 					props:[],  //跳转三级导航传递参数
 					trademark: '', //品牌
 					order: '1:asc', //升序还是降序   比如order:'1:asc'    order:'2:desc'  1是销量   2代表价格
-					pageNum: 1,
+					pageNo: 1,
 					pageSize: 5,
 				}
 			}
@@ -208,7 +208,7 @@
 			},
 			// 获取当前页 （分页器）
 			getPageNum(num){
-				this.searchParams.pageNum = num
+				this.searchParams.pageNo = num
 				// 重新发送请求
 				this.search()
 			},
