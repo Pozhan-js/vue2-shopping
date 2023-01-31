@@ -28,7 +28,20 @@ const routes = [
   {
     name: 'detail',
     path: '/detail/:id?',
-    component: () => import('@/view/Detail') //详情页
+    component: () => import('@/view/Detail'), //详情页
+    props: true // 添加了这一行代码，会将之前传入的params参数直接用props来接收
+  },
+  // 添加购物车成功页面
+  {
+    name: 'assCartSuccess',
+    path: '/assCartSuccess',
+    component: () => import('@/view/AddCartSuccess')
+  },
+  // 购物车页面
+  {
+    name: 'shopCart',
+    path: '/shopCart',
+    component: () => import('@/view/ShopCart')
   },
   {
     path: '/',  // 设置默认的页面

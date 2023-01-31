@@ -28,61 +28,70 @@
       <div class="bottom">
         <h1 class="logoArea">
           <a class="logo" title="尚品汇" href="###" target="_blank">
-            <img src="./images/logo.png" alt="">
+            <img src="./images/logo.png" alt="" />
           </a>
         </h1>
         <div class="searchArea">
           <form action="###" class="searchForm">
-            <input type="text" v-model="keyword" id="autocomplete" class="input-error input-xxlarge" />
-            <button class="sui-btn btn-xlarge btn-danger" @click="btnSearch" type="button">搜索</button>
+            <input
+              type="text"
+              v-model="keyword"
+              id="autocomplete"
+              class="input-error input-xxlarge"
+            />
+            <button
+              class="sui-btn btn-xlarge btn-danger"
+              @click="btnSearch"
+              type="button"
+            >
+              搜索
+            </button>
           </form>
         </div>
       </div>
     </header>
   </div>
-
 </template>
 
 <script>
 export default {
   name: "Header",
-  data(){
+  data() {
     return {
-      keyword:''
-    }
+      keyword: "",
+    };
   },
   methods: {
     btnSearch() {
       // this.$router.push('/search')
-      let {query} = this.$route
-    //当页面跳转时传递keyWord参数
-    this.$router.push({
-      name:'search', //通过命名参数进行跳转
-      params:{
-        keyword:this.keyword || undefined
-      },
-      //这里可能会疑惑为什么 会有query参数 因为在search页面也有搜索框 
-      query
-    })
-    }
+      let { query } = this.$route;
+      //当页面跳转时传递keyWord参数
+      this.$router.push({
+        name: "search", //通过命名参数进行跳转
+        query: {
+          //这里可能会疑惑为什么 会有query参数 因为在search页面也有搜索框 我也有可能在search页面点击搜索框
+          ...query,
+          keyword: this.keyword || undefined,
+        },
+      });
+    },
   },
-  mounted(){
+  mounted() {
     // 当页面跳转时 将搜索框数据清除
-    this.$bus.$on('remove-searchKeyword',()=>{
-      this.keyword = ''
-    })
+    this.$bus.$on("remove-searchKeyword", () => {
+      this.keyword = "";
+    });
   },
-  beforeDestroy(){
+  beforeDestroy() {
     // 当组件卸载时 清除事件 释放缓存
-    this.$bus.$off('remove-searchKeyword')
-  }
-
-}
+    this.$bus.$off("remove-searchKeyword");
+  },
+};
 </script>
 
 <style lang="less" scoped>
 .header {
-  &>.top {
+  & > .top {
     background-color: #eaeaea;
     height: 30px;
     line-height: 30px;
@@ -113,17 +122,15 @@ export default {
         a {
           padding: 0 10px;
 
-          &+a {
+          & + a {
             border-left: 1px solid #b3aeae;
           }
         }
-
       }
-
     }
   }
 
-  &>.bottom {
+  & > .bottom {
     width: 1200px;
     margin: 0 auto;
     overflow: hidden;

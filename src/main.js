@@ -5,7 +5,17 @@ import store from './store'
 import TypeNav from '@/components/TypeNav'
 import Pagination from '@/components/Pagination'
 import 'swiper/css/swiper.min.css'
+// import ElementUI from 'element-ui';
+// import 'element-ui/lib/theme-chalk/index.css';
+import { Button, Row, Message } from 'element-ui';
+// 注册组件
+Vue.component(Button.name, Button)
+Vue.component(Row.name, Row)
+Vue.component(Message.name, Message)
 
+// 将组建挂载到vue实列上方便访问
+Vue.prototype.$message = Message
+Vue.prototype.$button = Button
 
 
 Vue.config.productionTip = false

@@ -18,3 +18,7 @@ export const reqGetFloorsListData = () => mockAjax.get('/floor')
 export const reqSearchGoodsInfoData = (searchParams) => ajax.post('/list', searchParams)
 // 5. 获取商品详情数据
 export const reqGoodDetailInfoData = (id) => ajax.get(`/item/${id}`)
+// 6. 添加到购物车
+export const reqAddOrUpdateCart = (skuId, skuNum) => ajax.post(`/cart/addToCart/${skuId}/${skuNum}`)
+
+

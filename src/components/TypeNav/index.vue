@@ -3,22 +3,52 @@
   <div class="type-nav">
     <div class="container">
       <div class="nav-left" @mouseleave="handleMouseLeave">
-        <h2 class="all" @mouseenter="isShowNav= true">全部商品分类</h2>
+        <h2 class="all" @mouseenter="isShowNav = true">全部商品分类</h2>
         <div class="sort" v-show="isShowNav">
-          <div class="all-sort-list2" @click="btnSearch">
-            <div class="item" v-for="level_one in categoryList.slice(0, -2)" :key="level_one.categoryId">
+          <div class="all-sort-list2">
+            <div
+              class="item"
+              @click="btnSearch"
+              v-for="level_one in categoryList.slice(0, -2)"
+              :key="level_one.categoryId"
+            >
               <h3>
-                <a href="" data-level='1' :data-id='level_one.categoryId' :data-name='level_one.categoryName'>{{ level_one.categoryName }}</a>
+                <a
+                  href="javascript:;"
+                  data-level="1"
+                  :data-id="level_one.categoryId"
+                  :data-name="level_one.categoryName"
+                  >{{ level_one.categoryName }}</a
+                >
               </h3>
               <div class="item-list clearfix">
                 <div class="subitem">
-                  <dl class="fore" v-for="level_two in level_one.categoryChild" :key="level_two.categoryId">
+                  <dl
+                    class="fore"
+                    v-for="level_two in level_one.categoryChild"
+                    :key="level_two.categoryId"
+                  >
                     <dt>
-                      <a href="" data-level='2' :data-id='level_two.categoryId' :data-name='level_two.categoryName'>{{ level_two.categoryName }}</a>
+                      <a
+                        href="javascript:;"
+                        data-level="2"
+                        :data-id="level_two.categoryId"
+                        :data-name="level_two.categoryName"
+                        >{{ level_two.categoryName }}</a
+                      >
                     </dt>
                     <dd>
-                      <em v-for="level_three in level_two.categoryChild" :key="level_three.categoryId">
-                        <a href="" data-level='3' :data-id='level_three.categoryId' :data-name='level_three.categoryName'>{{ level_three.categoryName }}</a>
+                      <em
+                        v-for="level_three in level_two.categoryChild"
+                        :key="level_three.categoryId"
+                      >
+                        <a
+                          href="javascript:;"
+                          data-level="3"
+                          :data-id="level_three.categoryId"
+                          :data-name="level_three.categoryName"
+                          >{{ level_three.categoryName }}</a
+                        >
                       </em>
                     </dd>
                   </dl>
@@ -43,50 +73,53 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 export default {
-  name: 'TypeNav',
+  name: "TypeNav",
   data() {
     return {
       isShowNav: true, //是否显示三级导航
-    }
+    };
   },
-  methods:{
+  methods: {
     //当点击三级列表时 发生跳转将search页面需要的参数传过去
-    btnSearch(e){
-      let {level,id,name} = e.target.dataset
+    btnSearch($event) {
+      let { level, id, name: categoryName } = $event.target.dataset;
 
-      if(!level) return //当没有等级时说明点击的不是三级列表中的链接
+      if (!level) return; //当没有等级时说明点击的不是三级列表中的链接
+      // console.log("函数执行层级");
+      let { params } = this.$route;
       // this.$router.push('/search') //通过编程式导航跳转到search页面
       this.$router.push({
-        name: 'search',
-        query:{
-          categoryName:name,
-          ['category'+level+'Id']:id
+        name: "search",
+        query: {
+          categoryName,
+          ["category" + level + "Id"]: id,
         },
-      })
+        params,
+      });
     },
-    handleMouseLeave(){
-    if(!this.$route.meta.isHiddenNav){
-      this.isShowNav= false
-    }
- }
+    handleMouseLeave() {
+      if (!this.$route.meta.isHiddenNav) {
+        this.isShowNav = false;
+      }
+    },
   },
   computed: {
     // 获取上去安吉
-    ...mapState('home', ['categoryList'])
+    ...mapState("home", ["categoryList"]),
   },
   mounted() {
     // 发送请求 获取对应的数据
     // 我们可以通过dispatch 派发vuex的数据
-    this.$store.dispatch('home/getCategoryListData') //相当于在页面挂在时 调用vuex中的getCategoryListData方法
-    if(this.$route.meta.isHiddenNav){
-      this.isShowNav = true
-    }else{
-      this.isShowNav = false
+    this.$store.dispatch("home/getCategoryListData"); //相当于在页面挂在时 调用vuex中的getCategoryListData方法
+    if (this.$route.meta.isHiddenNav) {
+      this.isShowNav = true;
+    } else {
+      this.isShowNav = false;
     }
-  }
-}
+  },
+};
 </script>
 
 <style lang="less" scoped>
