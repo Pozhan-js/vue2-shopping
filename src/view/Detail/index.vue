@@ -349,7 +349,7 @@
 <script>
   import ImageList from './ImageList/ImageList'
   import Zoom from './Zoom/Zoom'
-
+  import {mapGetters} from 'vuex'
   export default {
     name: 'Detail',
     
@@ -357,9 +357,11 @@
       ImageList,
       Zoom
     },
+    computed:{
+      ...mapGetters('detail',['categoryView','spuSaleAttrList'])
+    },
     mounted(){
       // 接收传递过来的路由参数id
-      // console.log(this.$route.params.id);
       let {id} = this.$route.params
       // 发送请求获取数据
       this.$store.dispatch('detail/getGoodDetailInfoData',id)

@@ -1,17 +1,45 @@
 <template>
   <div class="spec-preview">
-    <img src="../images/s1.png" />
-    <div class="event"></div>
+    <img ref="img1" :src="skuInfo.skuDefaultImg" />
+    <!-- 这个适用于鼠标移动的元素 和父元素一样高 -->
+    <div class="event" @mousemove="move"></div>
     <div class="big">
-      <img src="../images/s1.png" />
+      <img ref="img2" :src="skuInfo.skuDefaultImg"  :style="{ left: -2 * left + 'px', top: -2 * top + 'px' }"/>
     </div>
-    <div class="mask"></div>
+    <!-- 这个是遮罩层 -->
+    <div class="mask" ref="mask" :style="{left: left + 'px',top: top + 'px'}"></div>
   </div>
 </template>
 
 <script>
+import {mapGetters} from 'vuex'
+//引入lodash库
+import _ from 'lodash'
   export default {
     name: "Zoom",
+    data(){
+      return {
+        top:0,
+        left:0
+      }
+    },
+    computed:{
+      ...mapGetters('detail',['skuInfo'])
+    },
+    methods:{
+      // 实现放大镜跟随鼠标移动
+      move:_.throttle(function(event){
+        let x = event.offsetX - this.$refs.mask.clientWidth/2
+        if( x< 0) x = 0
+        if(x > 200) x=200
+        let y = event.offsetY - this.$refs.mask.clientHeight/2
+        if(y< 0) y = 0
+        if(y > 200) y=200
+
+        this.top = y
+        this.left = x
+      },1000/60)    //表示 1秒 也就是1000毫秒 执行 60次 这个是人眼极限
+    },
   }
 </script>
 

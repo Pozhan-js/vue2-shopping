@@ -23,7 +23,17 @@ const mutations = {
   }
 }
 
-const getters = {}
+const getters = {
+  categoryView(state) {
+    return state.detailInfo.categoryView || {}
+  },
+  skuInfo(state) {
+    return state.detailInfo.skuInfo || {}
+  },
+  spuSaleAttrList(state) {
+    return state.detailInfo.spuSaleAttrList || {}
+  }
+}
 
 export default {
   namespaced: true,
