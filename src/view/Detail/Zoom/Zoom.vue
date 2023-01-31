@@ -40,6 +40,17 @@ import _ from 'lodash'
         this.left = x
       },1000/60)    //表示 1秒 也就是1000毫秒 执行 60次 这个是人眼极限
     },
+    mounted(){
+      this.$bus.$on('get-imageUrl',(url)=>{
+        console.log('自定义函数执行');
+        this.skuInfo.skuDefaultImg = url
+      })
+    },
+    // beforeDestroy(){
+    //   // 释放缓存
+    //   this.$bus.$off('get-imageUrl')
+    // }
+
   }
 </script>
 
