@@ -1,5 +1,6 @@
 // 1. 引入axios模块 
 import axios from 'axios'
+import { getUserTempId } from '@/utils/getUserTempId'
 import 'nprogress/nprogress.css' // 引入对应的样式
 import NProgress from 'nprogress'
 // 2. 创建axios实例对象 以后整个项目都用这个实例发送请求
@@ -12,6 +13,9 @@ const ajax = axios.create({
 // 3. 设置请求拦截器
 ajax.interceptors.request.use(config => {
   NProgress.start(); //进度条开始显示
+
+  // 在请求之前 添加请求头 添加uuid
+  config.headers.userTempId = getUserTempId()
   return config
 })
 

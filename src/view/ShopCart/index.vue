@@ -11,80 +11,51 @@
         <div class="cart-th6">操作</div>
       </div>
       <div class="cart-body">
-        <ul class="cart-list">
+        <ul class="cart-list" v-for="cart in cartInfoList" :key="cart.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list">
+            <input
+              type="checkbox"
+              name="chk_list"
+              :checked="!!cart.isChecked"
+              @change="changeStatus(cart)"
+            />
           </li>
           <li class="cart-list-con2">
-            <img src="./images/goods1.png">
-            <div class="item-msg">米家（MIJIA） 小米小白智能摄像机增强版 1080p高清360度全景拍摄AI增强</div>
+            <img :src="cart.imgUrl" />
+            <div class="item-msg">
+              {{ cart.skuName }}
+            </div>
           </li>
           <li class="cart-list-con4">
-            <span class="price">399.00</span>
+            <span class="price">{{ cart.cartPrice / cart.skuNum }}.00</span>
           </li>
           <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" value="1" minnum="1" class="itxt">
-            <a href="javascript:void(0)" class="plus">+</a>
+            <a
+              href="javascript:void(0)"
+              @click="deleteNum(cart.skuNum)"
+              class="mins"
+              >-</a
+            >
+            <input
+              autocomplete="off"
+              type="text"
+              :value="cart.skuNum"
+              minnum="1"
+              class="itxt"
+            />
+            <a
+              href="javascript:void(0)"
+              @click="addNum(cart.skuNum)"
+              class="plus"
+              >+</a
+            >
           </li>
           <li class="cart-list-con6">
-            <span class="sum">399</span>
+            <span class="sum">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
             <a href="#none" class="sindelet">删除</a>
-            <br>
-            <a href="#none">移到收藏</a>
-          </li>
-        </ul>
-
-        <ul class="cart-list">
-          <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" id="" value="">
-          </li>
-          <li class="cart-list-con2">
-            <img src="./images/goods2.png">
-            <div class="item-msg">华为（MIJIA） 华为metaPRO 30 浴霸4摄像 超清晰</div>
-          </li>
-          <li class="cart-list-con4">
-            <span class="price">5622.00</span>
-          </li>
-          <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" value="1" minnum="1" class="itxt">
-            <a href="javascript:void(0)" class="plus">+</a>
-          </li>
-          <li class="cart-list-con6">
-            <span class="sum">5622</span>
-          </li>
-          <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
-            <br>
-            <a href="#none">移到收藏</a>
-          </li>
-        </ul>
-
-        <ul class="cart-list">
-          <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" id="" value="">
-          </li>
-          <li class="cart-list-con2">
-            <img src="./images/goods3.png">
-            <div class="item-msg">iphone 11 max PRO 苹果四摄 超清晰 超费电 超及好用</div>
-          </li>
-          <li class="cart-list-con4">
-            <span class="price">11399.00</span>
-          </li>
-          <li class="cart-list-con5">
-            <a href="javascript:void(0)" class="mins">-</a>
-            <input autocomplete="off" type="text" value="1" minnum="1" class="itxt">
-            <a href="javascript:void(0)" class="plus">+</a>
-          </li>
-          <li class="cart-list-con6">
-            <span class="sum">11399</span>
-          </li>
-          <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
-            <br>
+            <br />
             <a href="#none">移到收藏</a>
           </li>
         </ul>
@@ -92,7 +63,7 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox">
+        <input class="chooseAll" type="checkbox" v-model="changeAllStatus" />
         <span>全选</span>
       </div>
       <div class="option">
@@ -101,25 +72,131 @@
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
-        <div class="chosed">已选择
-          <span>0</span>件商品</div>
+        <div class="chosed">
+          已选择 <span>{{ goodsLength }}</span
+          >件商品
+        </div>
         <div class="sumprice">
           <em>总价（不含运费） ：</em>
-          <i class="summoney">0</i>
+          <i class="summoney">{{ goodsAllPrice }}</i>
         </div>
         <div class="sumbtn">
           <a class="sum-btn" href="###" target="_blank">结算</a>
         </div>
       </div>
     </div>
+
+    <Dialog :visible="visible">
+      <template v-slot:header> 提示 </template>
+      <template> 此操作将永久删除数据，是否继续？ </template>
+      <template #footer>
+        <div class="btn-footer">
+          <button class="btn">取消</button>
+          <button class="btn primary">确认</button>
+        </div>
+      </template>
+    </Dialog>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'ShopCart',
-  }
+import {
+  reqShopCartListData,
+  reqChangeShopCartInfoState,
+  reqChangeAllCartState,
+} from "@/api";
+import Dialog from "@/components/Dialog";
+export default {
+  name: "ShopCart",
+  data() {
+    return {
+      cartInfoList: [],
+      num: 0,
+      visible: false, //决定
+    };
+  },
+  components: {
+    Dialog,
+  },
+  computed: {
+    // 商品数
+    goodsLength() {
+      return this.cartInfoList.reduce(
+        // prev 初始值（数组下标为0的值）current（下一个值）
+        (prev, current) => prev + current.isChecked,
+        0
+      );
+    },
+    // 商品总价
+    goodsAllPrice() {
+      return this.cartInfoList.reduce(
+        (prev, current) => prev + current.cartPrice,
+        0
+      );
+    },
+    // 全选全不选按钮
+    changeAllStatus: {
+      get() {
+        return this.cartInfoList.every((item) => item.isChecked == 1);
+      },
+      async set(val) {
+        // console.log("val", val);
+        let isChecked = val ? 1 : 0;
+        let goodsIdList = [];
+        // 收取所有商品的id
+        this.cartInfoList.forEach((item) => {
+          item.isChecked = isChecked;
 
+          // 将id存储在数组中
+          goodsIdList.push(item.skuId);
+        });
+        // 发送请求改变所有商品
+        const allGoods = await reqChangeAllCartState(isChecked, goodsIdList);
+        if (allGoods.code === 200) {
+          this.$message.success(
+            isChecked === 1 ? "已选中所有商品" : "已取消所有商品"
+          );
+        } else {
+          this.$message.error("全选按钮状态改变失败");
+        }
+      },
+    },
+  },
+  methods: {
+    // 增加商品数
+    // deleteNum(num) {},
+    async changeStatus(info) {
+      let isChecked = 1 - info.isChecked;
+      const statusData = await reqChangeShopCartInfoState(
+        info.skuId,
+        isChecked
+      );
+      if (statusData.code === 200) {
+        this.$message({
+          message: "商品状态更新成功...",
+          type: "success",
+        });
+        // Message.success('更新成功...')
+        // 让页面中的状态发生改变一下即可
+        info.isChecked = isChecked;
+      } else {
+        this.$message({
+          message: "商品状态更新失败...",
+          type: "error",
+        });
+      }
+    },
+  },
+  async mounted() {
+    const ShopCartData = await reqShopCartListData();
+    console.log("shopCart", ShopCartData);
+    if (ShopCartData.code === 200) {
+      this.cartInfoList = ShopCartData.data[0].cartInfoList;
+    } else {
+      this.$message.error("获取购物车商品信息失败");
+    }
+  },
+};
 </script>
 
 <style lang="less" scoped>
@@ -163,6 +240,8 @@
       margin: 15px 0;
       border: 1px solid #ddd;
       .cart-list {
+        display: flex;
+        align-items: center;
         padding: 10px;
         border-bottom: 1px solid #ddd;
         overflow: hidden;
@@ -288,7 +367,6 @@
           font-size: 16px;
         }
       }
-			
 
       .sumbtn {
         float: right;

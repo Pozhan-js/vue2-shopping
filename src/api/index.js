@@ -20,5 +20,16 @@ export const reqSearchGoodsInfoData = (searchParams) => ajax.post('/list', searc
 export const reqGoodDetailInfoData = (id) => ajax.get(`/item/${id}`)
 // 6. 添加到购物车
 export const reqAddOrUpdateCart = (skuId, skuNum) => ajax.post(`/cart/addToCart/${skuId}/${skuNum}`)
+// 7. 发送请求获取购物车中的商品数据
+export const reqShopCartListData = () => ajax.get('/cart/cartList')
+// 8. 更新购物车中数据的选中状态
+export const reqChangeShopCartInfoState = (skuID, isChecked) => ajax.get(`/cart/checkCart/${skuID}/${isChecked}`)
+// 当大括号中只有一行代码的时候，可以省略return和大括号
+export const reqChangeAllCartState = (isChecked, skuIdList) =>
+  ajax({
+    url: `/cart/batchCheckCart/${isChecked}`,
+    method: 'post',
+    data: skuIdList
+  })
 
 
