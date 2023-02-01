@@ -33,5 +33,7 @@ export const reqChangeAllCartState = (isChecked, skuIdList) =>
   })
 // 10. 删除一件购物车的商品
 export const reqDelOnShopCartInfo = (skuId) => ajax.delete(`/cart/deleteCart/${skuId}`)
+// 11. 批量删除商品
+export const reqDelSelectedCartInfo = (selectedObj) => ajax.delete(`/cart/batchDeleteCart`, selectedObj)
 
 
