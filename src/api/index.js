@@ -24,12 +24,14 @@ export const reqAddOrUpdateCart = (skuId, skuNum) => ajax.post(`/cart/addToCart/
 export const reqShopCartListData = () => ajax.get('/cart/cartList')
 // 8. 更新购物车中数据的选中状态
 export const reqChangeShopCartInfoState = (skuID, isChecked) => ajax.get(`/cart/checkCart/${skuID}/${isChecked}`)
-// 当大括号中只有一行代码的时候，可以省略return和大括号
+// 9. 当大括号中只有一行代码的时候，可以省略return和大括号
 export const reqChangeAllCartState = (isChecked, skuIdList) =>
   ajax({
     url: `/cart/batchCheckCart/${isChecked}`,
     method: 'post',
     data: skuIdList
   })
+// 10. 删除一件购物车的商品
+export const reqDelOnShopCartInfo = (skuId) => ajax.delete(`/cart/deleteCart/${skuId}`)
 
 

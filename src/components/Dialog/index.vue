@@ -1,9 +1,9 @@
 <template>
-  <div class="dialog">
+  <div class="dialog" v-show="visible">
     <div class="dialog-wrap">
       <div class="dialog-header">
         <slot name="header" />
-        <button class="dialog-header-close">X</button>
+        <button class="dialog-header-close" @click="btnClose">X</button>
       </div>
       <div class="dialog-body">
         <slot></slot>
@@ -18,8 +18,16 @@
 <script>
 export default {
   name: "Dialog",
+  props: {
+    visible: {
+      type: Boolean,
+      require: true,
+    },
+  },
   methods: {
-    btnClose() {},
+    btnClose() {
+      this.$emit("update:visible", false);
+    },
   },
 };
 </script>

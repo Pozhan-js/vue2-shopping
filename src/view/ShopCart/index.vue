@@ -54,7 +54,12 @@
             <span class="sum">{{ cart.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet">删除</a>
+            <a
+              href="javascript:;"
+              @click="showDialog(cart.skuId)"
+              class="sindelet"
+              >删除</a
+            >
             <br />
             <a href="#none">移到收藏</a>
           </li>
@@ -86,13 +91,13 @@
       </div>
     </div>
 
-    <Dialog :visible="visible">
+    <Dialog :visible.sync="visible">
       <template v-slot:header> 提示 </template>
       <template> 此操作将永久删除数据，是否继续？ </template>
       <template #footer>
         <div class="btn-footer">
-          <button class="btn">取消</button>
-          <button class="btn primary">确认</button>
+          <button class="btn" @click="visible = false">取消</button>
+          <button class="btn primary" @click="deleteGoods">确认</button>
         </div>
       </template>
     </Dialog>
@@ -104,6 +109,7 @@ import {
   reqShopCartListData,
   reqChangeShopCartInfoState,
   reqChangeAllCartState,
+  reqDelOnShopCartInfo,
 } from "@/api";
 import Dialog from "@/components/Dialog";
 export default {
@@ -112,8 +118,23 @@ export default {
     return {
       cartInfoList: [],
       num: 0,
+      visible: false, // 默认值
+      skuId: "", //存储商品的id
       visible: false, //决定
     };
+  },
+  watch: {
+    visible: {
+      immediate: true,
+      handler() {
+        if (this.visible) {
+          // 当对话框弹出时 要求滚动条不能滚动
+          document.documentElement.style.overflow = "hidden";
+        } else {
+          document.documentElement.style.overflow = "auto";
+        }
+      },
+    },
   },
   components: {
     Dialog,
@@ -184,6 +205,26 @@ export default {
           message: "商品状态更新失败...",
           type: "error",
         });
+      }
+    },
+    // 显示对话框 并且设置好skuId
+    showDialog(id) {
+      this.skuId = id;
+      this.visible = true;
+    },
+    // 删除商品
+    async deleteGoods() {
+      this.visible = false;
+      // 发送请求获取删除后的数据
+      const deleteGoodsData = await reqDelOnShopCartInfo(this.skuId);
+      // 因为商品被删除调 所以商品数组要重新计算
+      this.cartInfoList = this.cartInfoList.filter(
+        (item) => item.skuId !== this.skuId
+      );
+      if (deleteGoodsData.code == 200) {
+        this.$message.success("已经成功删除商品");
+      } else {
+        this.$message.error("删除商品失败");
       }
     },
   },
@@ -384,6 +425,34 @@ export default {
           background: #e1251b;
           overflow: hidden;
         }
+      }
+    }
+  }
+}
+.btn-footer {
+  position: absolute;
+  right: 16px;
+  bottom: 20px;
+  .btn {
+    width: 70px;
+    height: 36px;
+    margin-right: 12px;
+    cursor: pointer;
+    border: none;
+    font-size: 14px;
+    border-radius: 8%;
+    &.btn-cancle {
+      border: 1px solid #ccc;
+      &:hover {
+        background-color: #ecf5ff;
+        color: #47a2ff;
+      }
+    }
+    &.btn-primary {
+      background-color: #409eff;
+      color: #fff;
+      &:hover {
+        background-color: #66b1ff;
       }
     }
   }
