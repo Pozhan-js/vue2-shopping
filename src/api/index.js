@@ -35,5 +35,23 @@ export const reqChangeAllCartState = (isChecked, skuIdList) =>
 export const reqDelOnShopCartInfo = (skuId) => ajax.delete(`/cart/deleteCart/${skuId}`)
 // 11. 批量删除商品
 export const reqDelSelectedCartInfo = (selectedObj) => ajax.delete(`/cart/batchDeleteCart`, selectedObj)
+// 12. 获取验证码
+export const reqGetVerifyCode = phone => ajax.get(`/user/passport/sendCode/${phone}`)
+// 13. 实现注册
+export const reqUserRegister = user => ajax.post('/user/passport/register', user)
+// 14. 实现登陆
+export const reqUserLogin = (user) => ajax.post('/user/passport/login', user)
+// 15. 实现登出
+export const reqUserLogout = () => ajax.get('/user/passport/logout')
+// 16. 获取邮寄地址 (该功能还未实现)
+export const reqGetUserAddressList = () => ajax.get('/user/userAddress/auth/findUserAddressList')
+// 17. 获取订单交易页数据
+export const reqTradeInfoData = () => ajax.get('/order/auth/trade')
+// 18. 提交订单信息
+export const reqSubmitOrder = (tradeNo, params) => ajax.post(`/order/auth/submitOrder?tradeNo=${tradeNo}`, params)
+// 19. 获得订单支付信息  也就是获取支付二维码
+export const reqGetPayQRcode = (orderId) => ajax.get(`/payment/weixin/createNative/${orderId}`)
+// 20. 查询支付的订单状态  是否支付成功
+export const reqQueryPayStatus = (orderId) => ajax.get(`/payment/weixin/queryPayStatus/${orderId}`)
 
 

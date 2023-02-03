@@ -1,6 +1,7 @@
 import VueRouter from 'vue-router'
 import vue from 'vue'
 import routes from './routes'
+import store from '@/store'
 
 // 使用路由插件
 vue.use(VueRouter)
@@ -30,6 +31,19 @@ VueRouter.prototype.replace = function (location, okCallback, errCallback) {
   }
 }
 
+
+// 创建白名单
+const whiteList = [
+  "home",
+  "login",
+  "register",
+  "search",
+  "detail",
+  "addcartsuccess",
+  "shopcart",
+];
+
+
 const router = new VueRouter({
   mode: 'history',
   routes: routes,
@@ -41,6 +55,22 @@ const router = new VueRouter({
       // return { top: 0, left: 0 }
     }
   }
+})
+
+// 定义路由全局导航守卫
+router.beforeEach((to, from, next) => {
+  if (whiteList.includes(to.name) || store.state.user.userInfo.token) {
+    // 表示 当跳转的 页面的name在白名单中 而且要有token才放行
+    next()
+    return
+  }
+
+  next({
+    name: 'login',  //跳转到login页面
+    query: {
+      redirect: to.path, //跳转时携带的参数
+    },
+  })
 })
 
 //导出router对象

@@ -44,6 +44,26 @@ const routes = [
     component: () => import('@/view/ShopCart')
   },
   {
+    name: 'trade',
+    path: '/trade',
+    component: () => import('@/view/Trade')
+  },
+  {
+    name: 'center',
+    path: '/center',
+    component: () => import('@/view/Center')
+  },
+  {
+    name: 'pay',
+    path: '/pay',
+    component: () => import('@/view/Pay')
+  },
+  {
+    name: 'paySuccess',
+    path: '/paySuccess',
+    component: () => import('@/view/PaySuccess')
+  },
+  {
     path: '/',  // 设置默认的页面
     redirect: '/home'
   }

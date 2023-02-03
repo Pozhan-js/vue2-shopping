@@ -4,13 +4,17 @@ import router from './router'
 import store from './store'
 import TypeNav from '@/components/TypeNav'
 import Pagination from '@/components/Pagination'
+import Dialog from '@/components/Dialog'
 import 'swiper/css/swiper.min.css'
+import load from '@/assets/loading.gif'
+import VueLazyLoad from 'vue-lazyload'
 // import ElementUI from 'element-ui';
 // import 'element-ui/lib/theme-chalk/index.css';
-import { Button, Row, Message } from 'element-ui';
+import { Button, Row, Message, Col } from 'element-ui';
 // 注册组件
 Vue.component(Button.name, Button)
 Vue.component(Row.name, Row)
+Vue.component(Col.name, Col)
 Vue.component(Message.name, Message)
 
 // 将组建挂载到vue实列上方便访问
@@ -22,7 +26,14 @@ Vue.config.productionTip = false
 
 // 注册全局组件
 Vue.component(TypeNav.name, TypeNav)
+Vue.component(Dialog.name, Dialog)
 Vue.component(Pagination.name, Pagination)
+
+
+//实现路由懒加载
+Vue.use(VueLazyLoad, {
+  loading: load
+})
 
 // 启动mock服务器
 import '@/mock/mockServer'

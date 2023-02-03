@@ -89,14 +89,14 @@
           <i class="summoney">{{ goodsAllPrice }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <router-link to="/trade" class="sum-btn">结算</router-link>
         </div>
       </div>
     </div>
 
     <Dialog :visible.sync="visible">
       <template v-slot:header> 提示 </template>
-      <template> 此操作将永久删除数据，是否继续？ </template>
+      <template> <p>此操作将永久删除数据，是否继续？</p> </template>
       <template #footer>
         <div class="btn-footer">
           <button class="btn" @click="visible = false">取消</button>
@@ -220,6 +220,8 @@ export default {
         isChecked
       );
       if (statusData.code === 200) {
+        // 但改变状态后刷新最新数据
+        this.getGoodsInfo();
         this.$message({
           message: "商品状态更新成功...",
           type: "success",
@@ -391,8 +393,6 @@ export default {
       margin: 15px 0;
       border: 1px solid #ddd;
       .cart-list {
-        display: flex;
-        align-items: center;
         padding: 10px;
         border-bottom: 1px solid #ddd;
         overflow: hidden;
@@ -539,6 +539,7 @@ export default {
     }
   }
 }
+
 .btn-footer {
   position: absolute;
   right: 16px;

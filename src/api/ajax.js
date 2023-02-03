@@ -3,6 +3,7 @@ import axios from 'axios'
 import { getUserTempId } from '@/utils/getUserTempId'
 import 'nprogress/nprogress.css' // 引入对应的样式
 import NProgress from 'nprogress'
+import store from '@/store'
 // 2. 创建axios实例对象 以后整个项目都用这个实例发送请求
 const ajax = axios.create({
   // target: 'http://sph-h5-api.atguigu.cn',
@@ -14,6 +15,12 @@ const ajax = axios.create({
 ajax.interceptors.request.use(config => {
   NProgress.start(); //进度条开始显示
 
+  // 在请求拦截器当中添加如下代码：
+  const token = store.state.user.userInfo.token
+
+  if (token) {
+    config.headers.token = token
+  }
   // 在请求之前 添加请求头 添加uuid
   config.headers.userTempId = getUserTempId()
   return config

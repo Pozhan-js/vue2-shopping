@@ -8,7 +8,7 @@ const state = {
 const actions = {
   async getGoodDetailInfoData({ commit }, id) {
     const detailData = await reqGoodDetailInfoData(id)
-    console.log('详情信息', detailData, id);
+    // console.log('详情信息', detailData, id);
     if (detailData.code === 200) {
       commit('GET_GOOD_DETAIL_INFO_DATA', detailData.data)
     } else {
